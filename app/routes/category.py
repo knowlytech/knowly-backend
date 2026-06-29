@@ -28,7 +28,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
-from app.schemas.category import Category
+from app.models.category import Category
 from app.models.post import Post   # 🔹 Post model import
 
 router = APIRouter()

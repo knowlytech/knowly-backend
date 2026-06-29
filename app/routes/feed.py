@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
@@ -23,7 +24,7 @@ def get_db():
 @router.get("/feed/home")
 def home_feed(
     limit: int = Query(20, le=50),
-    cursor: str | None = None,
+    cursor: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
     query = (
@@ -81,7 +82,7 @@ def home_feed(
 def category_feed(
     category_id: int,
     limit: int = Query(20, le=50),
-    cursor: str | None = None,
+    cursor: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
     query = db.query(Post).filter(
