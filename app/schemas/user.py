@@ -2,7 +2,7 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 class SignupSchema(BaseModel):
     first_name: str
-    middle_name: str | None = None
+    middle_name: Optional[str] = None
     last_name: str
     email: EmailStr
     password: str

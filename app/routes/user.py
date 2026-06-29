@@ -49,6 +49,7 @@
 
 import time
 from datetime import datetime, timezone
+from typing import Optional
 from uuid import UUID
 import os
 import shutil
@@ -58,6 +59,7 @@ from app.database import SessionLocal
 from app.schemas.post import PostCreate
 from app.schemas.user import UpdateProfileSchema
 from app.models.post import Post
+from app.models.category import Category
 from app.utils.validation import validate_50_words, validate_media
 from app.dependencies.auth import get_current_user
 from app.models.user import User
@@ -85,6 +87,10 @@ def create_post(
 ):
     # ✅ word count calculate
     word_count = len(post.content.split())
+
+    category = db.query(Category).filter(Category.id == post.category_id).first()
+    if not category:
+        raise HTTPException(status_code=400, detail="Selected category does not exist")
 
     new_post = Post(
         title=post.title,
@@ -120,7 +126,7 @@ def create_post(
 # -----------------------------
 @router.get("/posts")
 def get_posts(
-    category_id: int | None = Query(default=None),
+    category_id: Optional[int] = Query(default=None),
     db: Session = Depends(get_db)
 ):
     """
